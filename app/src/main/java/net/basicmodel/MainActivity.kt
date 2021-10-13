@@ -8,6 +8,7 @@ import com.example.weeboos.permissionlib.PermissionRequest
 import kotlinx.android.synthetic.main.activity_main.*
 import net.fragment.AllMessageFragment
 import net.fragment.SendMessageFragment
+import net.receiver.MessageReceiver
 import net.utils.MessageManager
 import java.util.ArrayList
 
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     )
     private val title = arrayOf("All Message", "Send Message")
     private var views: ArrayList<Fragment> = ArrayList()
+    private val receiver = MessageReceiver()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,4 +47,5 @@ class MainActivity : AppCompatActivity() {
         views.add(SendMessageFragment())
         tab.setViewPager(viewpager, title, this, views)
     }
+
 }

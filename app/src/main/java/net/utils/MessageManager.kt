@@ -1,7 +1,11 @@
 package net.utils
 
+import android.app.Activity
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.telephony.SmsManager
 import net.entity.MessageEntity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,6 +25,12 @@ class MessageManager {
         fun get(): MessageManager {
             return i!!
         }
+    }
+
+    fun sendMessage(activity: Activity, phone: String, content: String) {
+        val i = PendingIntent.getActivity(activity, 0, Intent(), 0)
+        val sManager = SmsManager.getDefault()
+        sManager.sendTextMessage(phone, null, content, i, null)
     }
 
     fun getMessage(context: Context): ArrayList<MessageEntity> {
