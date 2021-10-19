@@ -1,7 +1,6 @@
 package net.adapter
 
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import net.basicmodel.R
@@ -16,7 +15,7 @@ class MessageAdapter(layoutResId: Int, data: ArrayList<MessageEntity>?) :
         val imageView = holder.getView<ImageView>(R.id.type)
         when (item.type) {
             "received" -> imageView.setBackgroundResource(R.mipmap.received)
-            "send" ->imageView.setBackgroundResource(R.mipmap.send)
+            "send" -> imageView.setBackgroundResource(R.mipmap.send)
             else -> imageView.setBackgroundResource(R.mipmap.unknown)
         }
     }

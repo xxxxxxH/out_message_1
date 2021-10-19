@@ -1,6 +1,7 @@
 package net.fragment
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -11,9 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemClickListener
-import com.chad.library.adapter.base.listener.OnItemLongClickListener
 import kotlinx.android.synthetic.main.layout_fragment_all.*
 import net.adapter.MessageAdapter
+import net.basicmodel.MessageDetailsActivity
 import net.basicmodel.R
 import net.entity.MessageEntity
 import net.event.MessageEvent
@@ -22,7 +23,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class AllMessageFragment : Fragment(), OnItemClickListener{
+class AllMessageFragment : Fragment(), OnItemClickListener {
     var msgAdapter: MessageAdapter? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,8 +61,18 @@ class AllMessageFragment : Fragment(), OnItemClickListener{
     }
 
     override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
-        val entity = adapter.data[position] as MessageEntity
-        detailsDialog(entity).show()
+        val data = adapter.data as ArrayList<MessageEntity>
+        val entity = data[position]
+        val phone = entity.phone
+        val result = ArrayList<MessageEntity>()
+        for (item in data) {
+            if (TextUtils.equals(item.phone, phone)) {
+                result.add(item)
+            }
+        }
+        val i = Intent(activity, MessageDetailsActivity::class.java)
+        i.putExtra("data", result)
+        startActivity(i)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

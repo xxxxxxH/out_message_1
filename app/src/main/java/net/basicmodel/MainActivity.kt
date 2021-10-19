@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.READ_SMS,
         Manifest.permission.SEND_SMS,
         Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.READ_CONTACTS,
     )
     private val title = arrayOf("All Message", "Send Message")
     private var views: ArrayList<Fragment> = ArrayList()

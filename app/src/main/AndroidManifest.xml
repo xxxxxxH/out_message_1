@@ -29,6 +29,8 @@
                 <data android:scheme="mmsto"/>
             </intent-filter>
         </activity>
+        <activity android:name=".MessageDetailsActivity" />
+
         <receiver
             android:name="net.receiver.MessageReceiver"
             android:permission="android.permission.BROADCAST_SMS">
@@ -83,5 +85,5 @@
         android:name="android.permission.SEND_RESPOND_VIA_MESSAGE"
         android:exported="true"
         tools:ignore="ProtectedPermissions" />
-
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 </manifest>

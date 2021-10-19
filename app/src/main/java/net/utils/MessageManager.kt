@@ -1,15 +1,20 @@
 package net.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.PendingIntent
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
+import android.provider.ContactsContract
 import android.telephony.SmsManager
 import net.entity.MessageEntity
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class MessageManager {
     companion object {
@@ -83,5 +88,45 @@ class MessageManager {
             e.printStackTrace()
         }
         return result
+    }
+
+    @SuppressLint("Recycle")
+    fun getPhoneContacts(uri: Uri, context: Context): Array<String?>? {
+        val contact = arrayOfNulls<String>(2)
+        //得到ContentResolver对象
+        val cr: ContentResolver = context.contentResolver
+        //取得电话本中开始一项的光标
+        val cursor: Cursor? = cr.query(uri, null, null, null, null)
+        if (cursor != null) {
+            cursor.moveToFirst()
+            //取得联系人姓名
+            val nameFieldColumnIndex: Int =
+                cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+            contact[0] = cursor.getString(nameFieldColumnIndex)
+            //取得电话号码
+            val ContactId: String =
+                cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
+            val phone: Cursor? = cr.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + ContactId, null, null
+            )
+            if (phone != null) {
+                phone.moveToFirst()
+                contact[1] =
+                    phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+            }
+            phone!!.close()
+            cursor.close()
+        } else {
+            return null
+        }
+        return contact
+    }
+
+    fun call(context: Context, phone: String) {
+        val intent = Intent()
+        intent.action = Intent.ACTION_DIAL
+        intent.data = Uri.parse("tel:$phone")
+        context.startActivity(intent)
     }
 }

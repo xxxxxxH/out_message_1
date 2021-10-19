@@ -1,6 +1,10 @@
 package net.fragment
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +17,9 @@ import net.utils.KeyboardManager
 import net.utils.MessageManager
 import org.greenrobot.eventbus.EventBus
 
+
 class SendMessageFragment : Fragment() {
+    var phoneNum: String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,6 +44,25 @@ class SendMessageFragment : Fragment() {
             phone.setText("")
             content.setText("")
         }
+        select.setOnClickListener {
+            val uri: Uri = ContactsContract.Contacts.CONTENT_URI
+            val intent = Intent(Intent.ACTION_PICK, uri)
+            startActivityForResult(intent, 0)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode === Activity.RESULT_OK) {
+            if (requestCode === 0) {
+                val uri: Uri = data!!.data!!
+                val contacts: Array<String?>? =
+                    activity?.let { MessageManager.get().getPhoneContacts(uri, it) }
+                phoneNum = contacts!![1]
+                phone.setText(phoneNum)
+            }
+        }
+
     }
 
 }
